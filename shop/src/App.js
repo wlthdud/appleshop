@@ -5,12 +5,14 @@ import bg from './img/bg.png';
 
 import data from './data.js';
 
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
+import Detail from './pages/Detail.js';
 
 
 function App() {
 
   let [shoes] = useState(data);
+  let navigate = useNavigate();
 
   return (
     <div className="App">
@@ -18,8 +20,8 @@ function App() {
         <Container>
           <Navbar.Brand href="#home">NeXT Shop</Navbar.Brand>
           <Nav className="me-auto">
-            <Link to="/" style={{marginRight:"10px", textDecoration:"none", color:"grey"}}>홈</Link>
-            <Link to="/detail" style={{marginRight:"10px", textDecoration:"none", color:"grey"}}>상세페이지</Link>
+            <Nav.Link onClick={()=>{ navigate('/') }} style={{marginRight:"10px", textDecoration:"none", color:"grey"}}>홈</Nav.Link>
+            <Nav.Link onClick={()=>{ navigate('/detail') }} style={{marginRight:"10px", textDecoration:"none", color:"grey"}}>상세페이지</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
@@ -42,6 +44,18 @@ function App() {
         </>
         }/>
         <Route path="/detail" element={<Detail/>}/>
+
+        <Route path="/about" element={<About/>}>
+          <Route path="member" element={<div>멤버</div>}/>
+          <Route path="location" element={<div>회사위치</div>}/>
+        </Route>
+
+        <Route path="/event" element={<EventPage/>}>
+          <Route path="one" element={<p>첫 주문시 양배추즙 서비스</p>}/>
+          <Route path="two" element={<p>생일기념 쿠폰받기</p>}/>
+        </Route>
+
+        <Route path="*" element={<div>404 Not Found</div>}/>
       </Routes>
 
       
@@ -49,26 +63,25 @@ function App() {
   );
 }
 
-function Detail(){
+function EventPage(){
   return(
-    <div className="container">
-      <div className="row">
-        <div className="col-md-6">
-          <img src="https://codingapple1.github.io/shop/shoes1.jpg" width="100%" />
-        </div>
-        <div className="col-md-6">
-          <h4 className="pt-5">상품명</h4>
-          <p>상품설명</p>
-          <p>120000원</p>
-          <button className="btn btn-danger">주문하기</button> 
-        </div>
-      </div>
-    </div> 
+    <>
+      <h4>오늘의 이벤트</h4>
+      <Outlet></Outlet>
+    </>
+  )
+}
+
+function About(){
+  return(
+    <>
+      <div>회사정보</div>
+      <Outlet></Outlet>
+    </>
   )
 }
 
 function Card(props){
-
   return(
     <Col sm>
       <img src = {"https://codingapple1.github.io/shop/shoes" + props.i + ".jpg"} width="80%"/>
